@@ -1,4 +1,5 @@
 import { Entity, Column, PrimaryColumn } from 'typeorm';
+import { Exclude } from 'class-transformer';
 import { UserInterface } from './interfaces/user';
 
 @Entity()
@@ -9,6 +10,7 @@ export class User implements UserInterface {
   @Column()
   login: string;
 
+  @Exclude()
   @Column()
   password: string;
 

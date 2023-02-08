@@ -13,13 +13,19 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  async createUser(userDto: CreateUserDto): Promise<User> {
-    return await this.usersRepository.save({
-      id: uuidv4(),
-      ...userDto,
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-      version: 1,
-    });
+  async createUser({ login, password }: CreateUserDto): Promise<User> {
+    const user = new User();
+    user.id = uuidv4();
+    user.login = login;
+    user.password = password;
+    user.createdAt = Date.now();
+    user.updatedAt = Date.now();
+    user.version = 1;
+
+    return await this.usersRepository.save(user);
+  }
+
+  async getAllUsers(): Promise<User[]> {
+    return await this.usersRepository.find();
   }
 }
