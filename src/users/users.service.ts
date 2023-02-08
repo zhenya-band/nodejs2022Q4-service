@@ -1,3 +1,5 @@
+import { UserOldPasswordWrongException } from './../exceptions/userOldPasswordWrong.exeption';
+import { UpdatePasswordDto } from './dto/UpdatePasswordDto';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -5,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { CreateUserDto } from './dto/CreateUserDto';
 import { User } from './user.entity';
+import { UserNotFoundException } from 'src/exceptions/userNorFound.exeption';
 
 @Injectable()
 export class UsersService {
@@ -25,7 +28,25 @@ export class UsersService {
     return await this.usersRepository.save(user);
   }
 
-  async getAllUsers(): Promise<User[]> {
+  async getAll(): Promise<User[]> {
     return await this.usersRepository.find();
+  }
+
+  async getById(id: string): Promise<User> {
+    const user = await this.usersRepository.findOneBy({ id });
+    if (!user) throw new UserNotFoundException(id);
+
+    return user;
+  }
+
+  async updatePassword(userId: string, { oldPassword, newPassword }: UpdatePasswordDto): Promise<User> {
+    const user = await this.getById(userId);
+
+    if (user.password !== oldPassword) {
+      throw new UserOldPasswordWrongException();
+    }
+
+    user.password = newPassword;
+    return this.usersRepository.save(user);
   }
 }

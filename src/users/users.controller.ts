@@ -1,3 +1,4 @@
+import { GetUserDto } from './dto/GetUserDto';
 import { CreateUserDto } from './dto/CreateUserDto';
 import { UsersService } from './users.service';
 import {
@@ -5,6 +6,7 @@ import {
   Controller,
   Get,
   Post,
+  Put,
   Param,
   UsePipes,
   UseInterceptors,
@@ -12,6 +14,7 @@ import {
 } from '@nestjs/common';
 import { ReturnUserDto } from './dto/ReturnUserDto';
 import { ValidationPipe } from 'src/pipes/validation.pipe';
+import { UpdatePasswordDto } from './dto/UpdatePasswordDto';
 
 @Controller('user')
 export class UsersController {
@@ -27,6 +30,23 @@ export class UsersController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Get('/')
   async getAll(): Promise<ReturnUserDto[]> {
-    return await this.usersService.getAllUsers();
+    return await this.usersService.getAll();
+  }
+
+  @UseInterceptors(ClassSerializerInterceptor)
+  @UsePipes(ValidationPipe)
+  @Get(':id')
+  async getById(@Param() { id }: GetUserDto): Promise<ReturnUserDto> {
+    return await this.usersService.getById(id);
+  }
+
+  @UseInterceptors(ClassSerializerInterceptor)
+  @UsePipes(ValidationPipe)
+  @Put(':id')
+  async updatePassword(
+    @Param() { id: userId }: GetUserDto,
+    @Body() updatePasswordDto: UpdatePasswordDto,
+  ): Promise<ReturnUserDto> {
+    return await this.usersService.updatePassword(userId, updatePasswordDto);
   }
 }
