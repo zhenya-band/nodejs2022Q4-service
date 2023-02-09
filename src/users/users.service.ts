@@ -21,8 +21,6 @@ export class UsersService {
     user.id = uuidv4();
     user.login = login;
     user.password = password;
-    user.createdAt = Date.now();
-    user.updatedAt = Date.now();
     user.version = 1;
 
     return await this.usersRepository.save(user);
@@ -47,9 +45,6 @@ export class UsersService {
     }
 
     user.password = newPassword;
-    user.updatedAt = Date.now();
-    user.version = user.version + 1;
-
     return this.usersRepository.save(user);
   }
 
