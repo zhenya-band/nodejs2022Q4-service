@@ -1,8 +1,8 @@
-import { Entity, Column, PrimaryColumn } from 'typeorm';
-import { ArtistInterface } from './interfaces/artist';
+import { Album } from 'src/album/album.entity';
+import { Entity, Column, PrimaryColumn, OneToMany } from 'typeorm';
 
 @Entity()
-export class Artist implements ArtistInterface {
+export class Artist {
   @PrimaryColumn()
   id: string;
 
@@ -11,4 +11,7 @@ export class Artist implements ArtistInterface {
 
   @Column()
   grammy: boolean;
+
+  @OneToMany(() => Album, (album) => album.artist)
+  albums: Album[];
 }

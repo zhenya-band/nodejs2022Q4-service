@@ -6,6 +6,8 @@ import { User } from './users/user.entity';
 import { UsersModule } from './users/users.module';
 import { ArtistModule } from './artist/artist.module';
 import { Artist } from './artist/artist.entity';
+import { AlbumModule } from './album/album.module';
+import { Album } from './album/album.entity';
 
 @Module({
   imports: [
@@ -16,11 +18,12 @@ import { Artist } from './artist/artist.entity';
       username: 'postgres',
       password: 'admin',
       database: 'nodejs-service',
-      entities: [User, Artist],
+      entities: [User, Artist, Album],
       synchronize: true,
     }),
     UsersModule,
     ArtistModule,
+    AlbumModule,
   ],
   controllers: [AppController],
   providers: [AppService],
