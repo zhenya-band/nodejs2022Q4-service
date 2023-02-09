@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { CreateUserDto } from './dto/CreateUserDto';
 import { User } from './user.entity';
-import { UserNotFoundException } from 'src/exceptions/userNorFound.exeption';
+import { NotFoundExceptionWithMessage } from 'src/exceptions/NorFound.exeption';
 
 @Injectable()
 export class UsersService {
@@ -34,7 +34,7 @@ export class UsersService {
 
   async getById(id: string): Promise<User> {
     const user = await this.usersRepository.findOneBy({ id });
-    if (!user) throw new UserNotFoundException(id);
+    if (!user) throw new NotFoundExceptionWithMessage(id);
 
     return user;
   }
@@ -55,7 +55,7 @@ export class UsersService {
 
   async delete(userId: string): Promise<void> {
     const user = await this.usersRepository.findOneBy({ id: userId });
-    if (!user) throw new UserNotFoundException(userId);
+    if (!user) throw new NotFoundExceptionWithMessage(userId);
 
     await this.usersRepository.delete({ id: userId });
   }

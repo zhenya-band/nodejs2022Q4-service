@@ -1,4 +1,3 @@
-import { GetUserDto } from './dto/GetUserDto';
 import { CreateUserDto } from './dto/CreateUserDto';
 import { UsersService } from './users.service';
 import {
@@ -12,10 +11,12 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
   Delete,
+  HttpCode,
 } from '@nestjs/common';
 import { ReturnUserDto } from './dto/ReturnUserDto';
 import { ValidationPipe } from 'src/pipes/validation.pipe';
 import { UpdatePasswordDto } from './dto/UpdatePasswordDto';
+import { GetByIdDto } from 'src/common/dto/GetByIdDto';
 
 @Controller('user')
 export class UsersController {
@@ -37,7 +38,7 @@ export class UsersController {
   @UseInterceptors(ClassSerializerInterceptor)
   @UsePipes(ValidationPipe)
   @Get(':id')
-  async getById(@Param() { id }: GetUserDto): Promise<ReturnUserDto> {
+  async getById(@Param() { id }: GetByIdDto): Promise<ReturnUserDto> {
     return await this.usersService.getById(id);
   }
 
@@ -45,7 +46,7 @@ export class UsersController {
   @UsePipes(ValidationPipe)
   @Put(':id')
   async updatePassword(
-    @Param() { id: userId }: GetUserDto,
+    @Param() { id: userId }: GetByIdDto,
     @Body() updatePasswordDto: UpdatePasswordDto,
   ): Promise<ReturnUserDto> {
     return await this.usersService.updatePassword(userId, updatePasswordDto);
@@ -53,7 +54,8 @@ export class UsersController {
 
   @UsePipes(ValidationPipe)
   @Delete(':id')
-  async delete(@Param() { id: userId }: GetUserDto): Promise<void> {
+  @HttpCode(204)
+  async delete(@Param() { id: userId }: GetByIdDto): Promise<void> {
     return await this.usersService.delete(userId);
   }
 }
