@@ -1,6 +1,13 @@
-import { Entity, Column, PrimaryColumn, BeforeInsert, BeforeUpdate } from 'typeorm';
+import { Entity, Column, PrimaryColumn, BeforeInsert, BeforeUpdate, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { UserInterface } from './interfaces/user';
+
+const DateTransformer = {
+  transformer: {
+    to: (value: Date) => value,
+    from: (value: Date) => value.getTime(),
+  },
+};
 
 @Entity()
 export class User implements UserInterface {
@@ -27,20 +34,9 @@ export class User implements UserInterface {
     this.version = this.version + 1;
   }
 
-  @Column({ type: 'bigint' })
+  @CreateDateColumn(DateTransformer)
   createdAt: number;
 
-  @BeforeInsert()
-  updateCreatedAt() {
-    this.createdAt = Date.now();
-  }
-
-  @Column({ type: 'bigint' })
+  @UpdateDateColumn(DateTransformer)
   updatedAt: number;
-
-  @BeforeInsert()
-  @BeforeUpdate()
-  updateUpdatedAt() {
-    this.updatedAt = Date.now();
-  }
 }
