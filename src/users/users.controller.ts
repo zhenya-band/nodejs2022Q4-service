@@ -11,6 +11,7 @@ import {
   UsePipes,
   UseInterceptors,
   ClassSerializerInterceptor,
+  Delete,
 } from '@nestjs/common';
 import { ReturnUserDto } from './dto/ReturnUserDto';
 import { ValidationPipe } from 'src/pipes/validation.pipe';
@@ -48,5 +49,11 @@ export class UsersController {
     @Body() updatePasswordDto: UpdatePasswordDto,
   ): Promise<ReturnUserDto> {
     return await this.usersService.updatePassword(userId, updatePasswordDto);
+  }
+
+  @UsePipes(ValidationPipe)
+  @Delete(':id')
+  async delete(@Param() { id: userId }: GetUserDto): Promise<void> {
+    return await this.usersService.delete(userId);
   }
 }

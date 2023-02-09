@@ -52,4 +52,11 @@ export class UsersService {
 
     return this.usersRepository.save(user);
   }
+
+  async delete(userId: string): Promise<void> {
+    const user = await this.usersRepository.findOneBy({ id: userId });
+    if (!user) throw new UserNotFoundException(userId);
+
+    await this.usersRepository.delete({ id: userId });
+  }
 }
