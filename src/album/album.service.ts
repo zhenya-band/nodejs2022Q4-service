@@ -28,8 +28,12 @@ export class AlbumService {
     return await this.albumRepository.find();
   }
 
+  async getCandidate(id: string): Promise<Album> {
+    return await this.albumRepository.findOneBy({ id });
+  }
+
   async getById(id: string): Promise<Album> {
-    const album = await this.albumRepository.findOneBy({ id });
+    const album = await this.getCandidate(id);
     if (!album) {
       throw new NotFoundExceptionWithMessage(id);
     }

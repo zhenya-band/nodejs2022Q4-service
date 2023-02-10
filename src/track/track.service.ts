@@ -17,8 +17,12 @@ export class TrackService {
     return await this.trackRepository.find();
   }
 
+  async getCandidate(id: string): Promise<Track> {
+    return await this.trackRepository.findOneBy({ id });
+  }
+
   async getById(id: string): Promise<Track> {
-    const track = await this.trackRepository.findOneBy({ id });
+    const track = await this.getCandidate(id);
     if (!track) {
       throw new NotFoundExceptionWithMessage(id);
     }

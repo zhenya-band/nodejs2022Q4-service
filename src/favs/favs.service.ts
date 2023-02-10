@@ -37,7 +37,7 @@ export class FavsService {
   }
 
   async addTrack(trackId: string): Promise<string> {
-    const track = await this.trackService.getById(trackId);
+    const track = await this.trackService.getCandidate(trackId);
     if (!track) {
       throw new UnprocessableEntityException(`track with id = ${trackId} not exists`);
     }
@@ -62,7 +62,7 @@ export class FavsService {
   }
 
   async addAlbum(albumId: string): Promise<string> {
-    const album = await this.albumService.getById(albumId);
+    const album = await this.albumService.getCandidate(albumId);
     if (!album) {
       throw new UnprocessableEntityException(`album with id = ${albumId} not exists`);
     }
