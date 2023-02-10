@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString, IsUUID } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class CreateAlbumDto {
   @IsString()
@@ -9,5 +9,6 @@ export class CreateAlbumDto {
   year: number;
 
   @IsUUID('4')
+  @IsOptional()
   artistId: string;
 }

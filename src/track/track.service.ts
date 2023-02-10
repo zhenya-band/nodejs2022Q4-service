@@ -17,7 +17,7 @@ export class TrackService {
     return await this.trackRepository.find();
   }
 
-  async getById(id: string): Promise<TrackInterface> {
+  async getById(id: string): Promise<Track> {
     const track = await this.trackRepository.findOneBy({ id });
     if (!track) {
       throw new NotFoundExceptionWithMessage(id);

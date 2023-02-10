@@ -1,10 +1,10 @@
 import { Entity, Column, PrimaryColumn, ManyToOne } from 'typeorm';
-import { TrackInterface } from './interfaces/track';
 import { Artist } from 'src/artist/artist.entity';
 import { Album } from 'src/album/album.entity';
+import { Favs } from 'src/favs/favs.entity';
 
 @Entity()
-export class Track implements TrackInterface {
+export class Track {
   @PrimaryColumn()
   id: string;
 
@@ -29,4 +29,7 @@ export class Track implements TrackInterface {
 
   @Column()
   duration: number;
+
+  @ManyToOne(() => Favs, (favorites) => favorites.artists)
+  favorites: Favs;
 }

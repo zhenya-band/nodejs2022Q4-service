@@ -28,7 +28,7 @@ export class AlbumService {
     return await this.albumRepository.find();
   }
 
-  async getById(id: string): Promise<AlbumInterface> {
+  async getById(id: string): Promise<Album> {
     const album = await this.albumRepository.findOneBy({ id });
     if (!album) {
       throw new NotFoundExceptionWithMessage(id);

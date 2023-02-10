@@ -27,7 +27,7 @@ export class ArtistService {
     return await this.artistRepository.find();
   }
 
-  async getById(id: string): Promise<ArtistInterface> {
+  async getById(id: string): Promise<Artist> {
     const artist = await this.artistRepository.findOneBy({ id });
     if (!artist) {
       throw new NotFoundExceptionWithMessage(id);
