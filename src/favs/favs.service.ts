@@ -29,7 +29,11 @@ export class FavsService {
       relations: { artists: true, albums: true, tracks: true },
     });
 
-    return favs[0];
+    if (favs.length) {
+      return favs[0];
+    }
+
+    return { artists: [], albums: [], tracks: [] };
   }
 
   async addTrack(trackId: string): Promise<string> {
@@ -83,9 +87,9 @@ export class FavsService {
   }
 
   async addArtist(artistId: string): Promise<string> {
-    const artist = await this.artistService.getById(artistId);
+    const artist = await this.artistService.getCandidate(artistId);
     if (!artist) {
-      throw new UnprocessableEntityException(`artist with id = ${artistId} not exists`);
+      throw new UnprocessableEntityException();
     }
 
     const favs = await this.getAll();

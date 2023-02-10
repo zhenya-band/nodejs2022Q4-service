@@ -16,6 +16,7 @@ export class Track {
 
   @ManyToOne(() => Artist, (artist) => artist.tracks, {
     nullable: true,
+    onDelete: 'SET NULL',
   })
   artist: Artist | null;
 
@@ -24,6 +25,7 @@ export class Track {
 
   @ManyToOne(() => Album, (album) => album.tracks, {
     nullable: true,
+    onDelete: 'SET NULL',
   })
   album: Album | null;
 

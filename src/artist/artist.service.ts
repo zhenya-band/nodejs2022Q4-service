@@ -27,8 +27,12 @@ export class ArtistService {
     return await this.artistRepository.find();
   }
 
+  async getCandidate(id: string): Promise<Artist> {
+    return await this.artistRepository.findOneBy({ id });
+  }
+
   async getById(id: string): Promise<Artist> {
-    const artist = await this.artistRepository.findOneBy({ id });
+    const artist = await this.getCandidate(id);
     if (!artist) {
       throw new NotFoundExceptionWithMessage(id);
     }

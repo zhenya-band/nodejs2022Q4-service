@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateTrackDto } from './dto/CreateTrackDto';
 import { TrackInterface } from './interfaces/track';
 import { Track } from './track.entity';
-
+import { v4 as uuidv4 } from 'uuid';
 @Injectable()
 export class TrackService {
   constructor(
@@ -28,6 +28,8 @@ export class TrackService {
 
   async create({ name, albumId, artistId, duration }: CreateTrackDto): Promise<TrackInterface> {
     const track = new Track();
+
+    track.id = uuidv4();
     track.name = name;
     track.albumId = albumId;
     track.artistId = artistId;

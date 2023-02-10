@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Param, UsePipes, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Param, UsePipes, Delete, HttpCode } from '@nestjs/common';
 import { GetByIdDto } from 'src/common/dto/GetByIdDto';
 import { ValidationPipe } from 'src/pipes/validation.pipe';
 import { FavsService } from './favs.service';
@@ -21,6 +21,7 @@ export class FavsController {
 
   @UsePipes(ValidationPipe)
   @Delete('track/:id')
+  @HttpCode(204)
   async deleteTrack(@Param() { id }: GetByIdDto) {
     return await this.favsService.deleteTrack(id);
   }
@@ -33,6 +34,7 @@ export class FavsController {
 
   @UsePipes(ValidationPipe)
   @Delete('album/:id')
+  @HttpCode(204)
   async deleteAlbum(@Param() { id }: GetByIdDto) {
     return await this.favsService.deleteAlbum(id);
   }
@@ -45,6 +47,7 @@ export class FavsController {
 
   @UsePipes(ValidationPipe)
   @Delete('artist/:id')
+  @HttpCode(204)
   async deleteArtist(@Param() { id }: GetByIdDto) {
     return await this.favsService.deleteArtist(id);
   }
