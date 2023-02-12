@@ -56,7 +56,7 @@ export class FavsService {
       throw new UnprocessableEntityException(`track with id = ${trackId} not exists`);
     }
 
-    favs.tracks = favs.tracks.slice(trackForDeleteIndex, 1);
+    favs.tracks.splice(trackForDeleteIndex, 1);
     await this.favsRepository.save(favs);
     return MESSAGES.TRACK_DELETED;
   }
@@ -81,7 +81,7 @@ export class FavsService {
       throw new UnprocessableEntityException(`album with id = ${albumId} not exists`);
     }
 
-    favs.albums = favs.albums.slice(albumForDeleteIndex, 1);
+    favs.albums.splice(albumForDeleteIndex, 1);
     await this.favsRepository.save(favs);
     return MESSAGES.ALBUM_DELETED;
   }
@@ -106,7 +106,7 @@ export class FavsService {
       throw new UnprocessableEntityException(`artist with id = ${artistId} not exists`);
     }
 
-    favs.artists = favs.artists.slice(artistForDeleteIndex, 1);
+    favs.artists.splice(artistForDeleteIndex, 1);
     await this.favsRepository.save(favs);
     return MESSAGES.ARTIST_DELETED;
   }
