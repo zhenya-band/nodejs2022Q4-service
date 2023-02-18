@@ -1,0 +1,37 @@
+version: '3'
+services:
+  app:
+    build: .
+    volumes:
+      - ./src:/app/src
+    restart: always
+    command: ${APP_COMMAND}
+    ports:
+      - ${PORT}:${PORT}
+    networks:
+      - my-network
+    depends_on:
+      - db
+  db:
+    build:
+      dockerfile: ./db/Dockerfile
+      context: .
+    restart: always
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    networks:
+      - my-network
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - db-logs:/var/log/postgresql
+networks:
+  my-network:
+    name: my-network
+    driver: bridge
+volumes:
+  db-data:
+  db-logs:
