@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
+import * as bcrypt from 'bcrypt';
 
 import { CreateUserDto } from './dto/CreateUserDto';
 import { User } from './user.entity';
@@ -17,10 +18,12 @@ export class UsersService {
   ) {}
 
   async createUser({ login, password }: CreateUserDto): Promise<User> {
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const user = new User();
     user.id = uuidv4();
     user.login = login;
-    user.password = password;
+    user.password = hashedPassword;
     user.version = 1;
 
     return await this.usersRepository.save(user);
@@ -39,8 +42,9 @@ export class UsersService {
 
   async updatePassword(userId: string, { oldPassword, newPassword }: UpdatePasswordDto): Promise<User> {
     const user = await this.getById(userId);
+    const isOldPasswordCorrect = await bcrypt.compare(oldPassword, user.password);
 
-    if (user.password !== oldPassword) {
+    if (!isOldPasswordCorrect) {
       throw new UserOldPasswordWrongException();
     }
 
@@ -53,5 +57,11 @@ export class UsersService {
     if (!user) throw new NotFoundExceptionWithMessage(userId);
 
     await this.usersRepository.delete({ id: userId });
+  }
+
+  async getByLogin(login: string): Promise<User | null> {
+    const user = await this.usersRepository.findOneBy({ login });
+
+    return user;
   }
 }
