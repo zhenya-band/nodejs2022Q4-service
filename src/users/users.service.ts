@@ -1,6 +1,6 @@
 import { UserOldPasswordWrongException } from './../exceptions/userOldPasswordWrong.exeption';
 import { UpdatePasswordDto } from './dto/UpdatePasswordDto';
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
@@ -18,6 +18,9 @@ export class UsersService {
   ) {}
 
   async createUser({ login, password }: CreateUserDto): Promise<User> {
+    const sameLoginUser = await this.getByLogin(login);
+    if (sameLoginUser) throw new BadRequestException(`user with login = '${login}' already exists`);
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = new User();

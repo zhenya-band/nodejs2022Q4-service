@@ -14,7 +14,7 @@ export class User implements UserInterface {
   @PrimaryColumn()
   id: string;
 
-  @Column()
+  @Column({ unique: true })
   login: string;
 
   @Exclude()
@@ -40,6 +40,7 @@ export class User implements UserInterface {
   @UpdateDateColumn(DateTransformer)
   updatedAt: number;
 
+  @Exclude()
   @Column({ nullable: true })
   refreshToken: string;
 }

@@ -3,7 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { ValidationPipe } from 'src/pipes/validation.pipe';
 import { CreateUserDto } from 'src/users/dto/CreateUserDto';
 import { AuthService } from './auth.service';
-import { RefreshDto } from './dto/RefreshDto';
+import { SignupResponse } from './interfaces/SignupResponse';
 import { Tokens } from './interfaces/Tokens';
 import { Public } from './public.decorator';
 
@@ -15,23 +15,22 @@ export class AuthController {
   @Public()
   @UsePipes(ValidationPipe)
   @HttpCode(201)
-  async signup(@Body() userDto: CreateUserDto): Promise<void> {
-    await this.authService.signup(userDto);
+  async signup(@Body() userDto: CreateUserDto): Promise<SignupResponse> {
+    return await this.authService.signup(userDto);
   }
 
   @Post('/login')
+  @HttpCode(200)
   @Public()
   @UseGuards(AuthGuard('local'))
-  @HttpCode(200)
   async login(@Request() req): Promise<Tokens> {
     return await this.authService.login(req.user);
   }
 
   @Post('/refresh')
-  @Public()
-  @UsePipes(ValidationPipe)
-  @UseGuards(AuthGuard('jwt-refresh'))
   @HttpCode(200)
+  @Public()
+  @UseGuards(AuthGuard('jwt-refresh'))
   async refresh(@Request() req): Promise<Tokens> {
     return await this.authService.login(req.user);
   }

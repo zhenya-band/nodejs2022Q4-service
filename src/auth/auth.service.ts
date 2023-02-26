@@ -1,3 +1,4 @@
+import { SignupResponse } from './interfaces/SignupResponse';
 import { ForbiddenException, forwardRef, Inject, Injectable } from '@nestjs/common';
 import { CreateUserDto } from 'src/users/dto/CreateUserDto';
 import { UsersService } from 'src/users/users.service';
@@ -18,8 +19,10 @@ export class AuthService {
 
   private readonly saltRounds = 10;
 
-  async signup(createUserDto: CreateUserDto): Promise<void> {
-    await this.usersService.createUser(createUserDto);
+  async signup(createUserDto: CreateUserDto): Promise<SignupResponse> {
+    const user = await this.usersService.createUser(createUserDto);
+
+    return { id: user.id };
   }
 
   async validateUser(login: string, password: string): Promise<User> {
