@@ -64,4 +64,16 @@ export class UsersService {
 
     return user;
   }
+
+  async getUserByRefreshToken(token: string): Promise<User | null> {
+    const user = await this.usersRepository.findOneBy({ refreshToken: token });
+    return user;
+  }
+
+  async saveRefreshToken(refreshToken: string, userId: string) {
+    const user = await this.getById(userId);
+    user.refreshToken = refreshToken;
+
+    return this.usersRepository.save(user);
+  }
 }

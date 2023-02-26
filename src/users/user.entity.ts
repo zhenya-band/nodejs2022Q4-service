@@ -39,4 +39,7 @@ export class User implements UserInterface {
 
   @UpdateDateColumn(DateTransformer)
   updatedAt: number;
+
+  @Column({ nullable: true })
+  refreshToken: string;
 }
