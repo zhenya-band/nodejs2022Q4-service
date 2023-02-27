@@ -10,6 +10,18 @@ async function bootstrap() {
   });
   app.useLogger(new CustomLogger());
 
+  const logger = app.get<CustomLogger>(CustomLogger);
+
+  process.on('uncaughtException', (error) => {
+    logger.error(`Uncaught exception: ${error.message}`, error.stack);
+    process.exit(1);
+  });
+
+  process.on('unhandledRejection', (reason) => {
+    logger.error(`unhandledRejection rejection: reason: ${reason}`);
+    process.exit(1);
+  });
+
   await app.listen(PORT);
 }
 bootstrap();

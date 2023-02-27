@@ -61,6 +61,7 @@ export class CustomLogger extends ConsoleLogger {
     const logFilePath = join(this.logDir, this.logFile);
     const stats = statSync(logFilePath);
     const fileSizes = stats.size;
+
     if (fileSizes > this.maxFileSize) {
       this.rotateLogFile();
     }
